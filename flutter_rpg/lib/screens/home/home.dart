@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_rpg/shared/character_card.dart';
 import 'package:flutter_rpg/shared/styled_button.dart';
 import 'package:flutter_rpg/shared/styled_text.dart';
 
@@ -39,10 +40,8 @@ class _HomeState extends State<Home> {
                 itemCount: characters.length,
                 itemBuilder: (_, index) {
                   return Container(
-                    color: Colors.grey[800],
                     margin: const EdgeInsets.only(bottom: 16),
-                    padding: const EdgeInsets.all(40),
-                    child: StyledText(characters[index]),
+                    child: CharacterCard(characters[index]),
                   );
                 },
               ),
