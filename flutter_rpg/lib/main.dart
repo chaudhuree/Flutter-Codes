@@ -37,3 +37,4 @@ class Sandbox extends StatelessWidget {
 // stl = stateless widget
 // stf = stateful widget
 // flutter pub get
+// dart pub add uuid

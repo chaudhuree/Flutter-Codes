@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_rpg/models/character.dart';
 import 'package:flutter_rpg/models/vocation.dart';
 import 'package:flutter_rpg/screens/create/vocation_card.dart';
 import 'package:flutter_rpg/shared/styled_button.dart';
 import 'package:flutter_rpg/shared/styled_text.dart';
 import 'package:flutter_rpg/theme.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:uuid/uuid.dart';
+
+var uuid = const Uuid();
 
 class Create extends StatefulWidget {
   const Create({super.key});
@@ -38,15 +42,27 @@ class _CreateState extends State<Create> {
   void handleSubmit() {
     if (_nameController.text.trim().isEmpty) {
       // print('name is empty');
+      // TODO: show error dialogue
       return;
     }
     if (_sloganContoller.text.trim().isEmpty) {
       // print('slogan is empty');
+      // TODO: show error dialogue
       return;
     }
 
     // print('name: ${_nameController.text}');
     // print('slogan: ${_sloganContoller.text}');
+
+    // create character
+    characters.add(
+      Character(
+        id: uuid.v4(),
+        name: _nameController.text.trim(),
+        slogan: _sloganContoller.text.trim(),
+        vocation: selectedVocation,
+      ),
+    );
   }
 
   @override
@@ -112,7 +128,7 @@ class _CreateState extends State<Create> {
               // select vocation title
               Center(
                 child: Icon(
-                  Icons.code,
+                  Icons.person,
                   color: AppColors.primaryColor,
                   size: 50,
                 ),
