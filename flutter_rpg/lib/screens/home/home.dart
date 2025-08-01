@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_rpg/models/character.dart';
 import 'package:flutter_rpg/shared/character_card.dart';
 import 'package:flutter_rpg/shared/styled_button.dart';
 import 'package:flutter_rpg/shared/styled_text.dart';
@@ -11,22 +12,6 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  List characters = [
-    "mario",
-    "luigi",
-    "peach",
-    "toad",
-    "bowser",
-    "koopa",
-    "yoshi",
-    "mario",
-    "luigi",
-    "peach",
-    "toad",
-    "bowser",
-    "koopa",
-    "yoshi",
-  ];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
