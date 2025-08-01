@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_rpg/screens/create/create.dart';
-// import 'package:flutter_rpg/screens/home/home.dart';
+// import 'package:flutter_rpg/screens/create/create.dart';
+import 'package:flutter_rpg/screens/home/home.dart';
 import 'package:flutter_rpg/theme.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -15,7 +15,7 @@ void main() {
         return MaterialApp(
           theme: primaryTheme,
           debugShowCheckedModeBanner: false,
-          home: const Create(),
+          home: const Home(),
         );
       },
     ),

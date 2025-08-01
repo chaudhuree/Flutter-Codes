@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_rpg/models/character.dart';
+
 import 'package:flutter_rpg/shared/styled_text.dart';
 import 'package:flutter_rpg/theme.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class CharacterCard extends StatelessWidget {
   const CharacterCard(this.character, {super.key});
@@ -21,20 +21,28 @@ class CharacterCard extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             // Character image - fixed width
-            SizedBox(
-              width: 80,
-              height: 80,
-              child: Image.asset(
-                'assets/img/vocations/${character.vocation.image}',
-                fit: BoxFit.cover,
-              ),
-            ),
+            // SizedBox(
+            //   width: 80,
+            //   height: 80,
+            //   child: Image.asset(
+            //     'assets/img/vocations/${character.vocation.image}',
+            //     fit: BoxFit.cover,
+            //   ),
+            // ),
             // Image.asset(
             //   'assets/img/vocations/algo_wizard.jpg',
             //   width: 80.w,
             //   height: 80.h,
             //   fit: BoxFit.cover,
             // ),
+            Container(
+              width: 80,
+              height: 80,
+              decoration: BoxDecoration(
+                color: AppColors.secondaryColor.withValues(alpha: 0.5),
+                borderRadius: BorderRadius.circular(5),
+              ),
+            ),
             const SizedBox(width: 12),
             // Character info - wrap in Expanded to take available space but not overflow
             Expanded(
