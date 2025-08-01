@@ -21,14 +21,14 @@ class CharacterCard extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             // Character image - fixed width
-            // SizedBox(
-            //   width: 80,
-            //   height: 80,
-            //   child: Image.asset(
-            //     'assets/img/vocations/${character.vocation.image}',
-            //     fit: BoxFit.cover,
-            //   ),
-            // ),
+            SizedBox(
+              width: 80,
+              height: 80,
+              child: Image.asset(
+                'assets/img/vocations/${character.vocation.image}',
+                fit: BoxFit.cover,
+              ),
+            ),
             // Image.asset(
             //   'assets/img/vocations/algo_wizard.jpg',
             //   width: 80.w,
