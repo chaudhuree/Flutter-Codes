@@ -44,11 +44,49 @@ class _CreateState extends State<Create> {
     if (_nameController.text.trim().isEmpty) {
       // print('name is empty');
       // TODO: show error dialogue
+      showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: const StyledHeading("Name is required"),
+            content: const StyledText(
+              "Every good RPG character need a great name..",
+            ),
+            actions: [
+              StyledButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: const StyledHeading("close"),
+              ),
+            ],
+            actionsAlignment: MainAxisAlignment.center,
+          );
+        },
+      );
       return;
     }
     if (_sloganContoller.text.trim().isEmpty) {
       // print('slogan is empty');
       // TODO: show error dialogue
+      showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: const StyledHeading("Slogan is required"),
+            content: const StyledText("Remember to add a catchy slogan.."),
+            actions: [
+              StyledButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: const StyledHeading("close"),
+              ),
+            ],
+            actionsAlignment: MainAxisAlignment.center,
+          );
+        },
+      );
       return;
     }
 
