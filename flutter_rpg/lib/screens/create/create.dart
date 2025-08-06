@@ -43,11 +43,12 @@ class _CreateState extends State<Create> {
   void handleSubmit() {
     if (_nameController.text.trim().isEmpty) {
       // print('name is empty');
-      // TODO: show error dialogue
       showDialog(
         context: context,
         builder: (context) {
           return AlertDialog(
+            // backgroundColor: AppColors.secondaryAccent,
+            // surfaceTintColor: Colors.transparent,
             title: const StyledHeading("Name is required"),
             content: const StyledText(
               "Every good RPG character need a great name..",
@@ -68,11 +69,12 @@ class _CreateState extends State<Create> {
     }
     if (_sloganContoller.text.trim().isEmpty) {
       // print('slogan is empty');
-      // TODO: show error dialogue
       showDialog(
         context: context,
         builder: (context) {
           return AlertDialog(
+            // backgroundColor: AppColors.secondaryAccent,
+            // surfaceTintColor: Colors.transparent,
             title: const StyledHeading("Slogan is required"),
             content: const StyledText("Remember to add a catchy slogan.."),
             actions: [
