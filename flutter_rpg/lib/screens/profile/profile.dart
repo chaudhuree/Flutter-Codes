@@ -87,6 +87,7 @@ class Profile extends StatelessWidget {
                   SnackBar(
                     content: StyledHeading('Character saved successfully'),
                     duration: const Duration(seconds: 2),
+                    backgroundColor: AppColors.secondaryColor,
                     showCloseIcon: true,
                   ),
                 );
