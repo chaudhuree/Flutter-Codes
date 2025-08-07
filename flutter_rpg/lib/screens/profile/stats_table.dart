@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_rpg/models/character.dart';
+import 'package:flutter_rpg/screens/profile/skill_list.dart';
 import 'package:flutter_rpg/shared/styled_text.dart';
 import 'package:flutter_rpg/theme.dart';
 
@@ -43,6 +44,9 @@ class _StatsTableState extends State<StatsTable> {
           Table(
             children: widget.character!.statsAsFormattedList.map((stat) {
               return TableRow(
+                decoration: BoxDecoration(
+                  color: AppColors.secondaryColor.withValues(alpha: 0.5),
+                ),
                 children: [
                   // stat title
                   TableCell(
@@ -100,6 +104,10 @@ class _StatsTableState extends State<StatsTable> {
               );
             }).toList(),
           ),
+
+          // skill list
+          const SizedBox(height: 20),
+          SkillList(widget.character!),
         ],
       ),
     );
