@@ -48,6 +48,7 @@ mixin Stats {
         _points++;
       }
     }
+    _points--;
   }
 
   void decreaseStat(String stat) {
