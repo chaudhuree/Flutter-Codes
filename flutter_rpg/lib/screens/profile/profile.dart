@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_rpg/models/character.dart';
 import 'package:flutter_rpg/screens/profile/stats_table.dart';
+import 'package:flutter_rpg/shared/styled_button.dart';
 import 'package:flutter_rpg/shared/styled_text.dart';
 import 'package:flutter_rpg/theme.dart';
 
@@ -78,6 +79,21 @@ class Profile extends StatelessWidget {
             const SizedBox(height: 20),
             StatsTable(character: character),
             // save button
+            const SizedBox(height: 20),
+            StyledButton(
+              onPressed: () {
+                // snackbar message
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: StyledHeading('Character saved successfully'),
+                    duration: const Duration(seconds: 2),
+                    showCloseIcon: true,
+                  ),
+                );
+              },
+              child: const StyledHeading('Save Character'),
+            ),
+            const SizedBox(height: 20),
           ],
         ),
       ),
