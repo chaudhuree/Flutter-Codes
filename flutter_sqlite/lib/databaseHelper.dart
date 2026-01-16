@@ -5,67 +5,21 @@ import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:sqflite/sqflite.dart';
 
-// Define a model for the data you want to store (User in this case)
-class User {
-  final int? id;
-  final String name;
-  final String email;
+import 'models/todo.dart';
+import 'models/user.dart';
 
-  User({this.id, required this.name, required this.email});
-
-  // Convert a User object into a Map so it can be inserted into the database
-  Map<String, dynamic> toMap() {
-    return {'id': id, 'name': name, 'email': email};
-  }
-
-  // Convert a Map into a User object
-  factory User.fromMap(Map<String, dynamic> map) {
-    return User(id: map['id'], name: map['name'], email: map['email']);
-  }
-}
-
-// Define a model for Todo
-class Todo {
-  final int? id;
-  final String title;
-  bool completed = false;
-  final int userId;
-
-  Todo({
-    this.id,
-    required this.title,
-    this.completed = false,
-    required this.userId,
-  });
-
-  // Convert a Todo object into a Map
-  Map<String, dynamic> toMap() {
-    return {
-      'id': id,
-      'title': title,
-      'completed': completed ? 1 : 0,
-      'userId': userId,
-    };
-  }
-
-  // Convert a Map into a Todo object
-  factory Todo.fromMap(Map<String, dynamic> map) {
-    return Todo(
-      id: map['id'],
-      title: map['title'],
-      completed: map['completed'] == 1,
-      userId: map['userId'],
-    );
-  }
-}
-
+// Singleton class to manage the SQLite database
 class DatabaseHelper {
+  // Private static variable to hold the database instance
   static Database? _database;
+
+  // Singleton instance of DatabaseHelper
   static final DatabaseHelper instance = DatabaseHelper._();
 
+  // Private constructor to prevent external instantiation
   DatabaseHelper._();
 
-  // Open the database, or create it if it doesn't exist
+  // Getter for the database instance (lazy-loaded)
   Future<Database> get database async {
     if (_database != null) {
       return _database!;
@@ -74,20 +28,26 @@ class DatabaseHelper {
     return _database!;
   }
 
-  // Initialize the database
+  // Initialize the database, or open it if already exists
   Future<Database> _initDatabase() async {
+    // Get the directory where the database file will be stored
     Directory documentsDirectory = await getApplicationDocumentsDirectory();
+
+    // Define the path to the database file
     String path = join(documentsDirectory.path, 'user.db');
+
+    // Open the database, creating it if it doesn't exist
     return await openDatabase(
       path,
-      version: 2,
-      onCreate: _onCreate,
-      onUpgrade: _onUpgrade,
+      version: 3,
+      onCreate: _onCreate, // Called when the database is first created
+      onUpgrade: _onUpgrade, // Called when the database is upgraded
     );
   }
 
-  // Create tables
-  Future _onCreate(Database db, int version) async {
+  // Create the tables in the database
+  Future<void> _onCreate(Database db, int version) async {
+    // Create the 'users' table
     await db.execute('''
       CREATE TABLE users(
         id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -95,19 +55,32 @@ class DatabaseHelper {
         email TEXT
       )
     ''');
+
+    // Create the 'todos' table
     await db.execute('''
       CREATE TABLE todos(
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         title TEXT,
-        completed INTEGER,
+        completed INTEGER DEFAULT 0,
         userId INTEGER,
         FOREIGN KEY (userId) REFERENCES users (id)
       )
     ''');
   }
 
-  // Upgrade database
-  Future _onUpgrade(Database db, int oldVersion, int newVersion) async {
+  // Helper method to check if a column exists in a table
+  Future<bool> _columnExists(
+    Database db,
+    String tableName,
+    String columnName,
+  ) async {
+    var result = await db.rawQuery("PRAGMA table_info($tableName)");
+    return result.any((column) => column['name'] == columnName);
+  }
+
+  // Handle database upgrades
+  Future<void> _onUpgrade(Database db, int oldVersion, int newVersion) async {
+    // If upgrading from version 1, create the 'todos' table
     if (oldVersion < 2) {
       await db.execute('''
         CREATE TABLE todos(
@@ -118,15 +91,27 @@ class DatabaseHelper {
         )
       ''');
     }
+
+    // If upgrading from version 2, add 'completed' column to 'todos' table
+    if (oldVersion < 3) {
+      bool columnExists = await _columnExists(db, 'todos', 'completed');
+      if (!columnExists) {
+        await db.execute(
+          'ALTER TABLE todos ADD COLUMN completed INTEGER DEFAULT 0',
+        );
+      }
+    }
   }
 
-  // Insert a user into the database
+  // **User-related CRUD operations**
+
+  // Insert a user into the 'users' table
   Future<int> insertUser(User user) async {
     Database db = await database;
     return await db.insert('users', user.toMap());
   }
 
-  // Get all users from the database
+  // Get all users from the 'users' table
   Future<List<User>> getUsers() async {
     Database db = await database;
     List<Map<String, dynamic>> maps = await db.query('users');
@@ -146,13 +131,15 @@ class DatabaseHelper {
     );
   }
 
-  // Delete a user
+  // Delete a user from the 'users' table
   Future<int> deleteUser(int id) async {
     Database db = await database;
     return await db.delete('users', where: 'id = ?', whereArgs: [id]);
   }
 
-  // Insert a todo into the database
+  // **Todo-related CRUD operations**
+
+  // Insert a todo into the 'todos' table
   Future<int> insertTodo(Todo todo) async {
     Database db = await database;
     return await db.insert('todos', todo.toMap());
@@ -171,7 +158,7 @@ class DatabaseHelper {
     });
   }
 
-  // Update a todo
+  // Update a todo's information
   Future<int> updateTodo(Todo todo) async {
     Database db = await database;
     return await db.update(
@@ -182,7 +169,18 @@ class DatabaseHelper {
     );
   }
 
-  // Delete a todo
+  // Update a todo's completed status
+  Future<int> updateTodoCompleted(int id, bool completed) async {
+    Database db = await database;
+    return await db.update(
+      'todos',
+      {'completed': completed ? 1 : 0},
+      where: 'id = ?',
+      whereArgs: [id],
+    );
+  }
+
+  // Delete a todo from the 'todos' table
   Future<int> deleteTodo(int id) async {
     Database db = await database;
     return await db.delete('todos', where: 'id = ?', whereArgs: [id]);
